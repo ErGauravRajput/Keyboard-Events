@@ -1,73 +1,95 @@
-<!doctype html>
-<html>
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-        <title>KeyBoardEvent</title>
-        <style>
-            * {
-                padding:0;
-                margin:0;
-                box-sizing:border-box;
-            }
-            html{
-                font-size:62.5%;
-            }
-            body{
-                height:100vh;
-                display:flex;
-                justify-content: center;
-                align-items: center;
-                background-color:#1b1b1b;
-            }
-            .keyPressed,.keyCode,.eventType,.charCode{
-                color:#f5ee62;
-            }
-            #myInput{
-                width:25rem;
-                height:4rem;
-                margin-bottom:3rem;
-            }
-            .output{
-                background-color:#2d2c2c;
-                font-size:1.7rem;
-                padding:1rem 2rem;
-                border-left:#fff solid 2px;
-                border-radius:1rem;
-            }
-            p{
-                font-size:1.7rem;
-                font-family:"urbanist",sans-serif;
-                letter-spacing:0.1rem;
-                margin-bottom:2rem;
-                margin-top:2rem;
-            }
-        </style>
 
-
-    </head>
-    <body>
-        <div>
-            <input type="text" id="myInput" placeholder="Type Something....."/>
-            <div class="output">
-                <p class="keyPressed">Key Pressed:</p>
-                <p class="keyCode">Key Code:</p>
-                <p class="charCode">Char CodeAt:</p>
-                <p class="eventType">Event Type:</p>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Key Event Inspector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            font-size: 62.5%;
+        }
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0f0f0f;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+        .container {
+            text-align: center;
+            background-color: #1f1f1f;
+            padding: 3rem 4rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+        #myInput {
+            width: 100%;
+            max-width: 30rem;
+            padding: 1.2rem;
+            font-size: 1.6rem;
+            border: none;
+            border-radius: 0.8rem;
+            outline: none;
+            margin-bottom: 2rem;
+            background-color: #2a2a2a;
+            color: #f5ee62;
+        }
+        .output p {
+            font-size: 1.8rem;
+            margin: 1rem 0;
+            color: #f5ee62;
+            transition: all 0.2s ease-in-out;
+        }
+        .highlight {
+            animation: pop 0.3s ease-in-out;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="myInput" placeholder="Type something..." />
+        <div class="output">
+            <p id="keyPressed">Key Pressed:</p>
+            <p id="keyCode">Key Code:</p>
+            <p id="charCode">Char CodeAt:</p>
+            <p id="eventType">Event Type:</p>
         </div>
-        <script>
-            const handleKeyPress = (event)=>{
-                // console.log(event);
-                document.querySelector(".keyPressed").innerText=`Key Pressed: ${event.key}`;
-                document.querySelector(".keyCode").innerText=`Key Code: ${event.keyCode}`;
-                document.querySelector(".charCode").innerText=`Char CodeAt: ${event.key.charCodeAt()}`;
-                document.querySelector(".eventType").innerText=`Event Type: ${event.type}`;
-            }
-            var Input=document.getElementById("myInput");
-            Input.addEventListener("keydown",handleKeyPress);
-            let a='a';
-            console.log(a.charCodeAt());
-        </script>
-    </body>
+    </div>
+
+    <script>
+        const input = document.getElementById("myInput");
+
+        input.addEventListener("keydown", (event) => {
+            const key = event.key;
+            const keyCode = event.keyCode || event.which;
+            const charCode = key.length === 1 ? key.charCodeAt(0) : '-';
+
+            const setText = (id, text) => {
+                const element = document.getElementById(id);
+                element.innerText = text;
+                element.classList.remove("highlight");
+                void element.offsetWidth; // restart animation
+                element.classList.add("highlight");
+            };
+
+            setText("keyPressed", `Key Pressed: ${key}`);
+            setText("keyCode", `Key Code: ${keyCode}`);
+            setText("charCode", `Char CodeAt: ${charCode}`);
+            setText("eventType", `Event Type: ${event.type}`);
+        });
+    </script>
+</body>
 </html>
